@@ -39,12 +39,12 @@ public class EyeOfSauron extends AbstractRelic {
                 int z = (int) player.getLocation().getZ();
 
                 playerList.add((Player) en);
-                Utils.sendRelicMessage("&eEye of Sauron found a nearby player named " + player.getName() + " at x: " + x + " y: " + y + " z: " + z, player);
+                Utils.sendRelicMessage("&e索倫之眼在附近發現了一名叫做 " + player.getName() + " 在 x: " + x + " y: " + y + " z: " + z, player);
             }
         }
 
         if(playerList.isEmpty()){
-            Utils.sendRelicMessage("&eEye of sauron is not able to find any nearby players!", player);
+            Utils.sendRelicMessage("&e索倫之眼無法找到附近的玩家!", player);
         }
 
         consumeRelic(itemInOffhand);

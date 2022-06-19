@@ -33,7 +33,7 @@ public class SkullOfPrometheus extends AbstractRelic {
             consumeRelic(itemInOffhand);
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 500, 1));
 
-            Utils.sendRelicMessage("&eThis skull is a powerful one, it gave me conduit power for trying to wear it but it got destroyed.", player);
+            Utils.sendRelicMessage("&e這個頭骨非常的強大, 它給我了海靈祝福的力量, 但因為我想戴上它, 它就壞掉了.", player);
         }
     }
 }

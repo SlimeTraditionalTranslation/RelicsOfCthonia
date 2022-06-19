@@ -64,7 +64,7 @@ public class PiglinMainListener implements Listener {
         }
 
         if(piglin.hasMetadata("relic_trader")){
-            Utils.sendRelicMessage("&ePiglin is currently in trade!", player);
+            Utils.sendRelicMessage("&e豬布林正在交易中!", player);
             event.setCancelled(true);
             return;
         }
@@ -149,7 +149,7 @@ public class PiglinMainListener implements Listener {
             // if canceled call necessary callbacks
             removeBarterMaterial(event);
             removePiglinMetadata(piglin);
-            executeTradeMessage(event, "&cFailed trade! piglin is not allowed to trade in the current location!");
+            executeTradeMessage(event, "&c交易失敗! 目前位置不允許豬布林交易");
 
             return;
         }
@@ -159,7 +159,7 @@ public class PiglinMainListener implements Listener {
         if(!sfItem.isPresent()){
             // if not present call necessary callbacks
             removeBarterMaterial(event);
-            executeTradeMessage(event, "&cFailed trade! the barter item you gave is not a cthonian relic.");
+            executeTradeMessage(event, "&c交易失敗! 你給的以物換物物品並不是克托尼亞遺物");
 
             return;
         }
@@ -171,7 +171,7 @@ public class PiglinMainListener implements Listener {
 
             if(ThreadLocalRandom.current().nextInt(0, 100) > relicCondition && haveCondition){
                 removeBarterMaterial(event);
-                executeTradeMessage(event, "&cFailed trade! piglin trader is not satisfied with the relic condition!");
+                executeTradeMessage(event, "&c交易失敗! 豬布林對遺物狀態不滿意!");
 
                 return;
             }
@@ -197,12 +197,12 @@ public class PiglinMainListener implements Listener {
                     event.getOutcome().add(finalReward.clone());
                 });
 
-                executeTradeMessage(event, "&aSuccessful trade! Piglin trader is happy to trade with you anytime!");
+                executeTradeMessage(event, "&a交易成功! 豬布林很樂意隨時與你再度進行交易!");
                 piglin.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, piglin.getLocation().add(0, 2.2, 0), 0);
                 piglin.getWorld().playSound(piglin.getLocation(), Sound.ENTITY_PIGLIN_ADMIRING_ITEM, 1.0F, 1.0F);
 
                 if(!haveCondition){
-                    executeTradeMessage(event, "&aSuccessful trade! The relic was obtained from sf give command!");
+                    executeTradeMessage(event, "&a交易成功! 遺物是從黏液科技的給予指令所獲得的!");
                 }
 
             } else {

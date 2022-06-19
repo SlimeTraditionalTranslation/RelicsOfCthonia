@@ -27,6 +27,6 @@ public class GoldenJar extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&eTime to find a piglin trader, this jar might be something worth trading off!", player);
+        Utils.sendRelicMessage("&e是時候找豬布林商人了, 這個罐子可能非常值得交易!", player);
     }
 }

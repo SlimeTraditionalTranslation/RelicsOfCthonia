@@ -3,6 +3,6 @@ version: '${project.version}'
 main: ne.fnfal113.relicsofcthonia.RelicsOfCthonia
 api-version: 1.16
 authors: [ FN_FAL113 ]
-description: My Slimefun addon jam 2022 entry which is based on nether theme
+description: 液科技附加 克托尼亞的遺物 繁體翻譯版.
 website: https://github.com/FN-FAL113
 depend: [Slimefun]

@@ -28,6 +28,6 @@ public class CthonianToken extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&eThis might be worth trading off to piglins since I have no uses for it.", player);
+        Utils.sendRelicMessage("&e這可能值得與豬布林交易, 因為它沒有任何作用.", player);
     }
 }
