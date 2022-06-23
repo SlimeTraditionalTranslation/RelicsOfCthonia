@@ -8,7 +8,7 @@ import ne.fnfal113.relicsofcthonia.listeners.MiningListener;
 import ne.fnfal113.relicsofcthonia.listeners.MobKillListener;
 import ne.fnfal113.relicsofcthonia.listeners.OffHandClickListener;
 import ne.fnfal113.relicsofcthonia.listeners.PiglinMainListener;
-//import org.bstats.bukkit.Metrics;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -27,7 +27,7 @@ public final class RelicsOfCthonia extends JavaPlugin implements SlimefunAddon {
     public void onEnable() {
         setInstance(this);
 
-        //new Metrics(this, 15420);
+        new Metrics(this, 15420);
 
         getLogger().info("************************************************************");
         getLogger().info("*         Relics of Cthonia - 由 FN_FAL113 製作            *");
