@@ -31,7 +31,7 @@ public final class RelicsOfCthonia extends JavaPlugin implements SlimefunAddon {
 
         getLogger().info("************************************************************");
         getLogger().info("*         Relics of Cthonia - 由 FN_FAL113 製作            *");
-        getLogger().info("*                 黏液科技附加果醬 2022 條目               *");
+        getLogger().info("*                 黏液科技附加競賽 2022 條目               *");
         getLogger().info("*                        地獄主題                          *");
         getLogger().warning("*               黏液科技繁體中文 - 非官方翻譯版            *");
         getLogger().info("************************************************************");

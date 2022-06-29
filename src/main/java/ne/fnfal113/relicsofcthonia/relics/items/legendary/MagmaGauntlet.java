@@ -27,7 +27,7 @@ public class MagmaGauntlet extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&e如果我能夠戴上這雙護手那就好了, 但它太它喵的熱了, 我最好拿去交易掉這個.", player);
+        Utils.sendRelicMessage("&e如果我能夠戴上這雙護手那就好了, 但它太它喵的熱了, 我最好拿去交易.", player);
     }
 
 }

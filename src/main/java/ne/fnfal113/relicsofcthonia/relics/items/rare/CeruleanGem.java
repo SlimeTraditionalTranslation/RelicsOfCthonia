@@ -27,7 +27,7 @@ public class CeruleanGem extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&e我應該交易掉這個寶石, 可能是一筆財富, 誰知道呢.", player);
+        Utils.sendRelicMessage("&e我應該交易這個寶石, 可能是一筆財富, 誰知道呢.", player);
     }
 
 }
