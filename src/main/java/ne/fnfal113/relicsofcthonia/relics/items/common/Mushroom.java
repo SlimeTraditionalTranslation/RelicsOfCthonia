@@ -34,7 +34,7 @@ public class Mushroom extends AbstractRelic {
             consumeRelic(itemInOffhand);
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 160, 1));
 
-            Utils.sendRelicMessage("&eMushroom is not edible! but you can trade it instead.", player);
+            Utils.sendRelicMessage("&e這個蘑菇已無法食用, 但你可以拿去交易它.", player);
         }
     }
 

@@ -6,7 +6,7 @@
 
     <groupId>ne.fnfal113</groupId>
     <artifactId>RelicsOfCthonia</artifactId>
-    <version>Unofficial-1.0</version>
+    <version>Efina 1.0</version>
     <packaging>jar</packaging>
 
     <name>RelicsOfCthonia</name>
@@ -111,6 +111,12 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.SlimeTraditionalTranslation</groupId>
+            <artifactId>dough</artifactId>
+            <version>175c92f</version>
         </dependency>
     </dependencies>
 </project>

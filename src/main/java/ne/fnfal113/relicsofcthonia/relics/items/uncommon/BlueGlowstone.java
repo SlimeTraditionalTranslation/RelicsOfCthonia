@@ -27,7 +27,7 @@ public class BlueGlowstone extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&eBlue glowstone has no uses, its old and broken but you can trade it to piglins.", player);
+        Utils.sendRelicMessage("&e藍色螢光石沒有任何作用, 它又破又舊, 但你可以拿去與豬布林交易.", player);
     }
 
 }

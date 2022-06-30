@@ -41,7 +41,7 @@ public class BlazeAshes extends AbstractRelic {
         }
 
         consumeRelic(itemInOffhand);
-        Utils.sendRelicMessage("&eWoah, what was that effect. I'll just trade this relic instead next time.", player);
+        Utils.sendRelicMessage("&e哇, 那是甚麼效果. 下次還是拿去交易掉這個遺物好了.", player);
     }
 
 }

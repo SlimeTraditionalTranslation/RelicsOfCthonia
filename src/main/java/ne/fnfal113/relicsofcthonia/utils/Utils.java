@@ -1,5 +1,6 @@
 package ne.fnfal113.relicsofcthonia.utils;
 
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import ne.fnfal113.relicsofcthonia.RelicsOfCthonia;
 import ne.fnfal113.relicsofcthonia.config.ConfigManager;
 import net.md_5.bungee.api.ChatColor;
@@ -21,7 +22,7 @@ public class Utils {
     }
 
     public static void sendRelicMessage(String message, LivingEntity livingEntity){
-        livingEntity.sendMessage(colorTranslator("&6[RelicsOfCthonia] > " + message));
+        livingEntity.sendMessage(colorTranslator("&6[克托尼亞的遺物] > " + message));
     }
 
     // set or update the given string to replace with the given config section
@@ -103,12 +104,23 @@ public class Utils {
             String value = configManager.getStringListById(section, settings).get(x);
 
             if(!value.isEmpty()) {
-                lore.add(j + 1, Utils.colorTranslator(color + prefix + value.replace("_", " ").toLowerCase()));
+                lore.add(j + 1, Utils.colorTranslator(color + prefix + Utils.translatelore(value).replace("_", " ").toLowerCase()));
             }
         }
 
         meta.setLore(lore);
         itemStack.setItemMeta(meta);
+    }
+
+    // Translate Slimefun Item in Drop Lore
+    // Reference from: https://github.com/SlimefunGuguProject/RelicsOfCthonia/blob/main/src/main/java/ne/fnfal113/relicsofcthonia/utils/Utils.java#L25-L32
+    public static final String translatelore(String value) {
+        SlimefunItem sfItem = SlimefunItem.getById(value);
+        if (sfItem != null) {
+            return sfItem.getItemName();
+        } else {
+            return value;
+        }
     }
 
     public static void createDelayedTask(Consumer<BukkitTask> taskConsumer, long delay){

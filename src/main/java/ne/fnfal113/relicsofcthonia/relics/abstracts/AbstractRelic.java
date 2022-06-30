@@ -60,9 +60,9 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
 
     public void updateRelicLore(){
        Utils.setLoreByDoubleValue(this.getItem(), this.getId(), "drop-chance", "%", "&e", "%");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-material", "Drops on:", "&e", "‣ ", "");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-mob", "Drops on:", "&e", "‣ ", "");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "piglin-barter-rewards", "Possible Piglin reward:", "&a", "‣ " + getPiglinRewardAmount() + " ", "");
+       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-material", "掉落在:", "&e", "‣ ", "");
+       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-mob", "掉落在:", "&e", "‣ ", "");
+       Utils.addLoreByStringList(this.getItem(), this.getId(), "piglin-barter-rewards", "豬布林可能給予的物品:", "&a", "‣ " + getPiglinRewardAmount() + " ", "");
     }
 
     public void initializeSettings(double dropChance, int piglinRewardAmount, int defaultDropSize){

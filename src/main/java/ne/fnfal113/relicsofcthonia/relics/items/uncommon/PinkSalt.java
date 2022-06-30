@@ -34,7 +34,7 @@ public class PinkSalt extends AbstractRelic {
             consumeRelic(itemInOffhand);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 120, 1));
 
-            Utils.sendRelicMessage("&eAfter consuming it, you get slow falling effect for no reason!", player);
+            Utils.sendRelicMessage("&e食用後無故獲得了緩降效果!", player);
         }
     }
 

@@ -28,6 +28,6 @@ public class TanzaniteBlock extends AbstractRelic {
 
     @Override
     public void onItemRightClick(PlayerInteractEvent event, Player player, ItemStack itemInOffhand) {
-        Utils.sendRelicMessage("&eWhat a good looking block but it can only be traded to piglins.", player);
+        Utils.sendRelicMessage("&e多麼好看的方塊, 但它只能拿去與豬布林交易.", player);
     }
 }
