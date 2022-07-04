@@ -5,6 +5,7 @@ import ne.fnfal113.relicsofcthonia.RelicsOfCthonia;
 import ne.fnfal113.relicsofcthonia.relics.abstracts.AbstractRelic;
 import ne.fnfal113.relicsofcthonia.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class MiningListener implements Listener {
             return;
         }
 
-        if(!event.getPlayer().getWorld().getName().equals("world_nether")){
+        if(event.getPlayer().getWorld().getEnvironment() != World.Environment.NETHER){
             return;
         }
 
@@ -48,11 +49,12 @@ public class MiningListener implements Listener {
         Utils.createAsyncTask(asyncTask -> {
            for (Map.Entry<AbstractRelic, List<Material>> entry: getWhereToDropMaterialMap().entrySet()){
                if(entry.getValue().contains(blockBrokeType)){
+                   // randomize twice since current thread random is using same seed for every block break in this loop
                    double randomOrigin = currentRandomThread.nextDouble(0.0, 60);
                    double randomNum = currentRandomThread.nextDouble(randomOrigin, 100);
 
                    if(randomNum < entry.getKey().getDropChance()) {
-                       ItemStack drop = entry.getKey().setRelicCondition();
+                       ItemStack drop = entry.getKey().setRelicCondition(true, 0);
                        Utils.createSyncTask(syncTask -> block.getWorld().dropItemNaturally(block.getLocation(), drop));
 
                        i.getAndIncrement();

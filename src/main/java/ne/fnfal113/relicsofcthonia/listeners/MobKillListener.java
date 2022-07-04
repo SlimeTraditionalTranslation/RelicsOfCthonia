@@ -44,7 +44,7 @@ public class MobKillListener implements Listener {
                     double randomNum = currentRandomThread.nextDouble(randomOrigin, 100);
 
                     if(randomNum < entry.getKey().getDropChance()) {
-                        ItemStack drop = entry.getKey().setRelicCondition();
+                        ItemStack drop = entry.getKey().setRelicCondition(true, 0);
                         Utils.createSyncTask(syncTask -> livingEntity.getWorld().dropItemNaturally(livingEntity.getLocation(), drop));
 
                         i.getAndIncrement();

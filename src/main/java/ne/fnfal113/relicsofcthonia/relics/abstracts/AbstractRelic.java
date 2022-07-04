@@ -186,12 +186,12 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
         }
     }
 
-    public ItemStack setRelicCondition(){
+    public ItemStack setRelicCondition(boolean isNaturallyDropped, int condition){
         ItemStack itemStack = this.getItem().clone();
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        int randomCondition = ThreadLocalRandom.current().nextInt(1,100);
+        int randomCondition = isNaturallyDropped ? ThreadLocalRandom.current().nextInt(1,100) : condition;
 
         pdc.set(Utils.createKey("relic_condition"), PersistentDataType.INTEGER, randomCondition);
         itemStack.setItemMeta(meta);
