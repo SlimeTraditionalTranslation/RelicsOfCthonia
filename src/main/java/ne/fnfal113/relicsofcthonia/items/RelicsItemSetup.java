@@ -3,6 +3,7 @@ package ne.fnfal113.relicsofcthonia.items;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.NoArgsConstructor;
 import ne.fnfal113.relicsofcthonia.RelicsOfCthonia;
+import ne.fnfal113.relicsofcthonia.miscellaneous.implementation.RegisterMiscItems;
 import ne.fnfal113.relicsofcthonia.relics.implementation.RegisterRelics;
 
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class RelicsItemSetup {
         initialised = true;
 
         RegisterRelics.registerRelics(plugin);
+        RegisterMiscItems.setup(plugin);
     }
 
 }

@@ -1,1 +1,5 @@
 auto-update: true
+
+## Disable this if you want to remove any
+## chat messages relic to voiding relics
+enable-relic-voider-notif: true

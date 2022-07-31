@@ -9,6 +9,7 @@ import ne.fnfal113.relicsofcthonia.listeners.MobKillListener;
 import ne.fnfal113.relicsofcthonia.listeners.OffHandClickListener;
 import ne.fnfal113.relicsofcthonia.listeners.PiglinMainListener;
 import ne.fnfal113.relicsofcthonia.listeners.RelicPlaceBreakListener;
+import ne.fnfal113.relicsofcthonia.listeners.RelicVoiderListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -56,6 +57,7 @@ public final class RelicsOfCthonia extends JavaPlugin implements SlimefunAddon {
         getServer().getPluginManager().registerEvents(new PiglinMainListener(), this);
         getServer().getPluginManager().registerEvents(new OffHandClickListener(), this);
         getServer().getPluginManager().registerEvents(new RelicPlaceBreakListener(), this);
+        getServer().getPluginManager().registerEvents(new RelicVoiderListener(), this);
     }
 
     @Override
