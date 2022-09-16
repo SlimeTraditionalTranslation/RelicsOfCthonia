@@ -40,21 +40,29 @@ public class MiningListener implements Listener {
         // only naturally generated blocks are accepted to prevent place and break farming
         if(block.hasMetadata("placed_block")){
             block.removeMetadata("placed_block", RelicsOfCthonia.getInstance());
+
             return;
         }
 
+        World world = event.getPlayer().getWorld();
         ThreadLocalRandom currentRandomThread = ThreadLocalRandom.current();
         AtomicInteger i = new AtomicInteger(0);
 
         Utils.createAsyncTask(asyncTask -> {
            for (Map.Entry<AbstractRelic, List<Material>> entry: getWhereToDropMaterialMap().entrySet()){
+               AbstractRelic abstractRelic = entry.getKey();
+
+               if(abstractRelic.isDisabledIn(world) || abstractRelic.isDisabled()){
+                   continue;
+               }
+
                if(entry.getValue().contains(blockBrokeType)){
                    // randomize twice since current thread random is using same seed for every block break in this loop
                    double randomOrigin = currentRandomThread.nextDouble(0.0, 60);
                    double randomNum = currentRandomThread.nextDouble(randomOrigin, 100);
 
-                   if(randomNum < entry.getKey().getDropChance()) {
-                       ItemStack drop = entry.getKey().setRelicCondition(true, 0);
+                   if(randomNum < abstractRelic.getDropChance()) {
+                       ItemStack drop = abstractRelic.setRelicCondition(true, 0);
                        Utils.createSyncTask(syncTask -> block.getWorld().dropItemNaturally(block.getLocation(), drop));
 
                        i.getAndIncrement();

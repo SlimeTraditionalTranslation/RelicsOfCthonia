@@ -259,7 +259,7 @@ public class ConfigManager {
             return parser.parse(new FileReader(file));
         } catch (IOException | JsonParseException | NullPointerException e) {
             e.printStackTrace();
-            return new FileReader("test");
+            return new FileReader("resource not found");
         }
     }
 
