@@ -10,6 +10,7 @@ import ne.fnfal113.relicsofcthonia.listeners.OffHandClickListener;
 import ne.fnfal113.relicsofcthonia.listeners.PiglinMainListener;
 import ne.fnfal113.relicsofcthonia.listeners.RelicPlaceBreakListener;
 import ne.fnfal113.relicsofcthonia.listeners.RelicVoiderListener;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -16,4 +16,7 @@ public class RelicsRegistry {
     @Getter
     private final Map<AbstractRelic, List<String>> whereToDropMobMap = new HashMap<>();
 
+    @Getter
+    private final Map<AbstractRelic, List<String>> piglinRewardList = new HashMap<>();
+
 }
