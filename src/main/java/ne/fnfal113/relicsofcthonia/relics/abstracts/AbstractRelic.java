@@ -22,7 +22,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -36,15 +35,12 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
     private final int defaultDropSize;
     @Getter
     private final int piglinRewardAmount;
-
     @Getter
     private final List<Material> netherMaterials = new ArrayList<>();
     @Getter
     private final ConfigManager configManager = RelicsOfCthonia.getInstance().getConfigManager();
     @Getter
     private final RelicsRegistry relicsRegistry = RelicsOfCthonia.getInstance().getRelicsRegistry();
-    @Getter
-    private final List<String> piglinRewardList = new ArrayList<>();
 
     @ParametersAreNonnullByDefault
     public AbstractRelic(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe,
@@ -52,21 +48,27 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
         super(itemGroup, item, recipeType, recipe);
 
         initializeSettings(dropChance, piglinRewardAmount, defaultDropSize);
-        this.dropChance = configManager.getDoubleValueById(this.getId(), "drop-chance");
-        this.piglinRewardAmount = configManager.getValueById(this.getId(), "piglin-reward-amount");
+        this.dropChance = getConfigManager().getCustomConfig("relic-settings").getDouble(this.getId() + "." + "drop-chance");
+        this.piglinRewardAmount = getConfigManager().getCustomConfig("relic-settings").getInt(this.getId() + "." + "piglin-reward-amount");
         this.defaultDropSize = defaultDropSize;
         updateRelicLore();
     }
 
     public void updateRelicLore(){
-       Utils.setLoreByDoubleValue(this.getItem(), this.getId(), "drop-chance", "%", "&e", "%");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-material", "掉落在:", "&e", "‣ ", "");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "drops-on-mob", "掉落在:", "&e", "‣ ", "");
-       Utils.addLoreByStringList(this.getItem(), this.getId(), "piglin-barter-rewards", "豬布林可能給予的物品:", "&a", "‣ " + getPiglinRewardAmount() + " ", "");
+       // update this itemstack object lore for the drop chance
+       Utils.setLoreByConfigValue(this.getItem(), this.getId(), "drop-chance", "%", "&e", "%", "relic-settings");
+       // update this itemstack object lore on which materials do relic drop
+       Utils.setLoreByConfigStringList(this.getItem(), this.getId(), "drops-on-material", "掉落在:", "&e", "‣ ", "", "relic-settings");
+       // update this itemstack object lore on which mobs do relic drop
+       Utils.setLoreByConfigStringList(this.getItem(), this.getId(), "drops-on-mob", "掉落在:", "&e", "‣ ", "", "relic-settings");
+       // update this itemstack object lore for the barter rewards
+       Utils.setLoreByConfigStringList(this.getItem(), this.getId(), "piglin-barter-rewards", "豬布林可能給予的物品:", "&a", "‣ " + getPiglinRewardAmount() + " ", "", "relic-settings");
     }
 
     public void initializeSettings(double dropChance, int piglinRewardAmount, int defaultDropSize){
         initNetherMaterials();
+
+        // configuration handling
         initSingleSectionSettings(dropChance, piglinRewardAmount);
         initDefaultWhereToDrop(defaultDropSize);
         initDefaultPiglinRewards(defaultDropSize);
@@ -75,32 +77,36 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
     }
 
     public void setRelicsRegistry(){
-        List<Material> finalMaterialList = new ArrayList<>();
-
-        // we load the relic settings file to retrieve values
-        // including newly added ones by an any admin
+        // load this relic config values to relicRegistry including newly added ones by an any admin
         try {
-            FileConfiguration config = getConfigManager().getCustomConfig();
+            FileConfiguration config = getConfigManager().getCustomConfig("relic-settings");
 
+            // retrieve this relic's config material list then add to relic registry
             if(config.isConfigurationSection(this.getId()) && config.getConfigurationSection(this.getId()).contains("drops-on-material")) {
+                List<Material> finalMaterialList = new ArrayList<>();
+
                 for (String materials : config.getConfigurationSection(this.getId()).getStringList("drops-on-material")) {
                     finalMaterialList.add(Material.matchMaterial(materials));
                 }
+
                 getRelicsRegistry().getWhereToDropMaterialMap().put(this, finalMaterialList);
             }
 
-            if(config.isConfigurationSection(this.getId())) {
-                List<String> finalMobList = new ArrayList<>(config.getConfigurationSection(this.getId()).getStringList("drops-on-mob"));
+            // retrieve this relic's config mob list then add to relic registry
+            if(config.isConfigurationSection(this.getId()) && config.getConfigurationSection(this.getId()).contains("drops-on-mob")) {
+                List<String> finalMobList = config.getConfigurationSection(this.getId()).getStringList("drops-on-mob");
+
                 getRelicsRegistry().getWhereToDropMobMap().put(this, finalMobList);
             }
 
+            // retrieve this relic's config rewards list then add to relic registry
             if(config.isConfigurationSection(this.getId()) && config.getConfigurationSection(this.getId()).contains("piglin-barter-rewards")) {
-                for (String reward : config.getConfigurationSection(this.getId()).getStringList("piglin-barter-rewards")) {
-                    getPiglinRewardList().add(reward);
-                }
+                List<String> finalRewardList = config.getConfigurationSection(this.getId()).getStringList("piglin-barter-rewards");
+
+                getRelicsRegistry().getPiglinRewardList().put(this, finalRewardList);
             }
         } catch (IllegalArgumentException | NullPointerException e){
-            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon setting relics registry! Please report on github issue tracker!");
+            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred on adding data to relics registry! Please report on github issue tracker!");
             e.printStackTrace();
         }
     }
@@ -114,74 +120,74 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
         getNetherMaterials().addAll(NetherMaterials.OTHER_BLOCKS.getMaterial());
     }
 
-    public void initDefaultPiglinRewards(int defaultDropSize) {
-        List<String> rewardList = new ArrayList<>();
-        List<String> randomRewardList = new ArrayList<>();
-
+    public void initSingleSectionSettings(double dropChance, int piglinRewardAmount) {
         try {
-            JsonObject jsonObject = (JsonObject) configManager.loadJson("piglin_barter_list");
-
-            for (int i = 1; i <= 7; i++) {
-                rewardList.add(jsonObject.getAsJsonObject(getRarity().name()).get("drop-" + i).getAsString());
-            }
-
-            for (int i = 0; i < defaultDropSize; i++) {
-                int randomIndex = ThreadLocalRandom.current().nextInt(rewardList.size());
-
-                if(!randomRewardList.contains(rewardList.get(randomIndex))) {
-                    randomRewardList.add(rewardList.get(randomIndex));
-                }
-            }
-
-            getConfigManager().setConfigStringListValues(this.getId(), "piglin-barter-rewards", randomRewardList, "relic-settings", false);
-        } catch (IOException | IllegalArgumentException | NullPointerException e){
-            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon initializing default piglin rewards! Please report on github issue tracker!");
+            getConfigManager().initializeConfig(this.getId(), "drop-chance", dropChance, "relic-settings");
+            getConfigManager().initializeConfig(this.getId(), "piglin-reward-amount", piglinRewardAmount, "relic-settings");
+        } catch (IllegalArgumentException | NullPointerException e){
+            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon initializing default single section settings! Please report on github issue tracker!");
             e.printStackTrace();
         }
     }
 
     public void initDefaultWhereToDrop(int defaultDropSize) {
-        List<String> mobList = new ArrayList<>();
-        List<String> randomMobList = new ArrayList<>();
-        List<String> randomMaterialList = new ArrayList<>();
-
         try {
-            JsonObject jsonObject = (JsonObject) configManager.loadJson("nether_mobs");
+            JsonObject jsonObject = configManager.loadJson("nether_mobs");
+            List<String> randomMobList = new ArrayList<>();
+            List<String> randomMaterialList = new ArrayList<>();
 
-            for (int i = 1; i <= 11; i++) {
-                mobList.add(jsonObject.getAsJsonPrimitive("nether_mob_" + i).getAsString());
-            }
-
+            // retrieve json resource for nether mobs and
+            // create a randomized mob list, size determined dy this object default drop size
             for (int i = 0; i < defaultDropSize; i++) {
-                int randomIndex = ThreadLocalRandom.current().nextInt(mobList.size());
+                String mob = jsonObject
+                                .getAsJsonPrimitive("nether_mob_" + ThreadLocalRandom.current().nextInt(1, 12))
+                                    .getAsString();
 
-                if(!randomMobList.contains(mobList.get(randomIndex))) {
-                    randomMobList.add(mobList.get(randomIndex));
+                if(!randomMobList.contains(mob)) {
+                    randomMobList.add(mob);
                 }
             }
 
+            // create a randomized material list, size determined dy this object default drop size
             for (int i = 0; i < defaultDropSize; i++) {
-                int randomIndex = ThreadLocalRandom.current().nextInt(getNetherMaterials().size());
+                String material = getNetherMaterials()
+                                    .get(ThreadLocalRandom.current().nextInt(0, getNetherMaterials().size()))
+                                        .toString();
 
-                if(!randomMaterialList.contains(getNetherMaterials().get(randomIndex).toString())) {
-                    randomMaterialList.add(getNetherMaterials().get(randomIndex).toString());
+                if(!randomMaterialList.contains(material)) {
+                    randomMaterialList.add(material);
                 }
             }
 
-            getConfigManager().setConfigStringListValues(this.getId(), "drops-on-mob", randomMobList, "relic-settings", false);
-            getConfigManager().setConfigStringListValues(this.getId(), "drops-on-material", randomMaterialList, "relic-settings", false);
-        } catch (IOException | IllegalArgumentException | NullPointerException e){
+            getConfigManager().initializeConfig(this.getId(), "drops-on-mob", randomMobList, "relic-settings");
+            getConfigManager().initializeConfig(this.getId(), "drops-on-material", randomMaterialList, "relic-settings");
+        } catch (IllegalArgumentException | NullPointerException e){
             RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon initializing default drop settings! Please report on github issue tracker!");
             e.printStackTrace();
         }
     }
 
-    public void initSingleSectionSettings(double dropChance, int piglinRewardAmount) {
+    public void initDefaultPiglinRewards(int defaultDropSize) {
         try {
-            getConfigManager().setConfigDoubleValues(this.getId(), "drop-chance", dropChance, "relic-settings", false);
-            getConfigManager().setConfigIntegerValues(this.getId(), "piglin-reward-amount", piglinRewardAmount, "relic-settings", false);
-        } catch (IOException | IllegalArgumentException | NullPointerException e){
-            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon initializing default single section settings! Please report on github issue tracker!");
+            JsonObject jsonObject = configManager.loadJson("piglin_barter_list");
+            List<String> randomRewardList = new ArrayList<>();
+
+            // retrieve json resource for barter rewards and
+            // create a randomized reward list, size determined dy this object default drop size
+            for (int i = 1; i <= defaultDropSize; i++) {
+                String reward = jsonObject
+                                    .getAsJsonObject(getRarity().name())
+                                        .get("drop-" + ThreadLocalRandom.current().nextInt(1,8))
+                                            .getAsString();
+
+                if(!randomRewardList.contains(reward)) {
+                    randomRewardList.add(reward);
+                }
+            }
+
+            getConfigManager().initializeConfig(this.getId(), "piglin-barter-rewards", randomRewardList, "relic-settings");
+        } catch (IllegalArgumentException | NullPointerException e){
+            RelicsOfCthonia.getInstance().getLogger().info("An error has occurred upon initializing default piglin rewards! Please report on github issue tracker!");
             e.printStackTrace();
         }
     }
@@ -200,7 +206,6 @@ public abstract class AbstractRelic extends SlimefunItem implements OffHandRight
 
         return itemStack.clone();
     }
-
 
     public int getRelicCondition(@Nonnull ItemStack itemStack){
         return itemStack.getItemMeta().getPersistentDataContainer().getOrDefault(Utils.createKey("relic_condition"), PersistentDataType.INTEGER, 0);

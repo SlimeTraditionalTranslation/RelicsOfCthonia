@@ -77,8 +77,13 @@ public class PiglinMainListener implements Listener {
         }
 
         if(sfItem.get() instanceof AbstractRelic){
+            // add barter material type
             piglin.addBarterMaterial(mainHandItem.getType());
+
+            // add metadata, piglin in trading mode
             piglin.setMetadata("relic_trader", new FixedMetadataValue(RelicsOfCthonia.getInstance(), "trading"));
+
+            // add piglin to map where player is the value for later retrieval
             getCurrentTradeMap().put(piglin.getUniqueId(), player.getUniqueId());
 
             Utils.createDelayedTask(task ->{
@@ -92,18 +97,21 @@ public class PiglinMainListener implements Listener {
 
                 Location loc = piglin.getLocation().clone();
                 loc.setPitch(47.0F);
+
                 piglin.teleport(loc);
             }, 2L);
 
             Utils.createDelayedTask(task -> {
                 Location loc = piglin.getLocation().clone();
                 loc.setDirection(player.getLocation().getDirection().multiply(-1));
+
                 piglin.teleport(loc);
             }, 25L);
 
             Utils.createDelayedTask(task -> {
                 Location loc = piglin.getLocation().clone();
                 loc.setPitch(47.0F);
+
                 piglin.teleport(loc);
             }, 45L);
 
@@ -117,7 +125,7 @@ public class PiglinMainListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(EntityDropItemEvent event){
         if(!(event.getEntity() instanceof Piglin)){
             return;
@@ -168,20 +176,20 @@ public class PiglinMainListener implements Listener {
             int relicCondition = relic.getRelicCondition(event.getInput());
             boolean haveCondition = relicCondition != 0;
 
-            if(ThreadLocalRandom.current().nextInt(0, 100) > relicCondition && haveCondition){
+            if(haveCondition && ThreadLocalRandom.current().nextInt(0, 100) > relicCondition){
                 removeBarterMaterial(event);
-                executeTradeMessage(event, "&c交易失敗! 豬布林對遺物狀態不滿意!");
+                executeTradeMessage(event, "&c交易失敗! 豬布林對遺物的狀態不滿意, 並在檢查時將其銷毀!");
 
                 return;
             }
 
-            if(!relic.getPiglinRewardList().isEmpty()){
-                List<String> rewardList = relic.getPiglinRewardList();
+            if(RelicsOfCthonia.getInstance().getRelicsRegistry().getPiglinRewardList().containsKey(relic)){
+                List<String> rewardList = RelicsOfCthonia.getInstance().getRelicsRegistry().getPiglinRewardList().get(relic);
 
-                int randomRewardIndex = ThreadLocalRandom.current().nextInt(1, rewardList.size() + 1);
+                int randomRewardIndex = ThreadLocalRandom.current().nextInt(0, rewardList.size());
                 int rewardAmount = relic.getPiglinRewardAmount();
 
-                String item = rewardList.get(randomRewardIndex - 1);
+                String item = rewardList.get(randomRewardIndex);
 
                 Optional<SlimefunItem> sfRewardItem = Optional.ofNullable(SlimefunItem.getById(item));
                 Optional<Material> rewardItem = Optional.ofNullable(Material.matchMaterial(item));
@@ -191,9 +199,10 @@ public class PiglinMainListener implements Listener {
 
                 rewardItem.ifPresent(material -> event.getOutcome().add(new ItemStack(material, rewardAmount)));
                 sfRewardItem.ifPresent(slimefunItem -> {
-                    ItemStack finalReward = new ItemStack(slimefunItem.getItem());
+                    ItemStack finalReward = new ItemStack(slimefunItem.getItem()).clone();
                     finalReward.setAmount(rewardAmount);
-                    event.getOutcome().add(finalReward.clone());
+
+                    event.getOutcome().add(finalReward);
                 });
 
                 executeTradeMessage(event, "&a交易成功! 豬布林很樂意隨時與你再度進行交易!");
