@@ -1,11 +1,16 @@
 package ne.fnfal113.relicsofcthonia.utils;
 
+import de.unpixelt.locale.Locale;
+import de.unpixelt.locale.Translate;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import ne.fnfal113.relicsofcthonia.RelicsOfCthonia;
 import ne.fnfal113.relicsofcthonia.config.ConfigManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -84,7 +89,7 @@ public class Utils {
             String value = configManager.getCustomConfig("relic-settings").getStringList(section + "." + settings).get(x);
 
             if(!value.isEmpty()) {
-                lore.add(j + 1, Utils.colorTranslator(color + prefix + Utils.translatelore(value).replace("_", " ").toLowerCase()));
+                lore.add(j + 1, Utils.colorTranslator(color + prefix + Utils.translatelore(value)));
             }
         }
 
@@ -94,12 +99,24 @@ public class Utils {
 
     // Translate Slimefun Item in Drop Lore
     // Reference from: https://github.com/SlimefunGuguProject/RelicsOfCthonia/blob/main/src/main/java/ne/fnfal113/relicsofcthonia/utils/Utils.java#L25-L32
-    public static final String translatelore(String value) {
+    public static String translatelore(String value) {
         SlimefunItem sfItem = SlimefunItem.getById(value);
+        Material mcMaterial = Material.matchMaterial(value);
+        EntityType mcEntityType = null;
+        try {
+            mcEntityType = EntityType.valueOf(value.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            //
+        }
+
         if (sfItem != null) {
             return sfItem.getItemName();
+        } else if (mcMaterial != null) {
+            return Translate.getMaterial(Locale.zh_tw, mcMaterial);
+        } else if (mcEntityType != null) {
+            return Translate.getEntity(Locale.zh_tw, mcEntityType);
         } else {
-            return value;
+            return "類型錯誤，請回報給翻譯組：" + value.toLowerCase().replace("_", "");
         }
     }
 

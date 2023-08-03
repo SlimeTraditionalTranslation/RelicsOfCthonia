@@ -115,8 +115,15 @@
 
         <dependency>
             <groupId>com.github.SlimeTraditionalTranslation</groupId>
+            <artifactId>Locale-API</artifactId>
+            <version>v1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.SlimeTraditionalTranslation</groupId>
             <artifactId>dough</artifactId>
-            <version>7142669</version>
+            <version>v1.0.0</version>
         </dependency>
     </dependencies>
 </project>
