@@ -125,7 +125,7 @@ public class PiglinMainListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onDrop(EntityDropItemEvent event){
         if(!(event.getEntity() instanceof Piglin)){
             return;
