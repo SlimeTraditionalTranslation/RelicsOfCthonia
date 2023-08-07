@@ -65,6 +65,7 @@ public class MobKillListener implements Listener {
         String entityType = livingEntity.getType().name().toLowerCase();
         World world = livingEntity.getWorld();
         AtomicInteger itemDroppedCounter = new AtomicInteger(0);
+        ThreadLocalRandom currentRandomThread = ThreadLocalRandom.current();
 
         Utils.createAsyncTask(asyncTask -> {
             Iterator<Map.Entry<AbstractRelic, List<String>>> dropIterator = getWhereToDropMobMap().entrySet().iterator();
@@ -81,7 +82,9 @@ public class MobKillListener implements Listener {
 
                 // check if relic mob list contains killed mob type
                 if(pair.getValue().contains(entityType)) {
-                    double randomNum = ThreadLocalRandom.current().nextDouble(0.0, 100);
+                    // biased probability to lower the chance of repeated values from the current random thread which utilizes same seed
+                    double randomOrigin = currentRandomThread.nextDouble(0.0, 60);
+                    double randomNum = ThreadLocalRandom.current().nextDouble(randomOrigin, 100);
 
                     if(randomNum < abstractRelic.getDropChance()) {
                         ItemStack drop = abstractRelic.setRelicConditionAndGet(true, 0);

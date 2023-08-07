@@ -26,7 +26,7 @@ public class MiningListener implements Listener {
     @Getter
     private final Map<AbstractRelic, List<Material>> whereToDropMaterialMap = RelicsOfCthonia.getInstance().getRelicsRegistry().getWhereToDropMaterialMap();
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         if(event.isCancelled()){
             return;
@@ -48,6 +48,7 @@ public class MiningListener implements Listener {
 
         World world = event.getPlayer().getWorld();
         AtomicInteger itemDroppedCounter = new AtomicInteger(0);
+        ThreadLocalRandom currentRandomThread = ThreadLocalRandom.current();
 
         Utils.createAsyncTask(asyncTask -> {
            Iterator<Map.Entry<AbstractRelic, List<Material>>> dropIterator =  getWhereToDropMaterialMap().entrySet().iterator(); 
@@ -63,7 +64,9 @@ public class MiningListener implements Listener {
                 }
 
                 if(pair.getValue().contains(blockBrokeType)) {
-                    double randomNum = ThreadLocalRandom.current().nextDouble(0.0, 100);
+                    // biased probability to lower the chance of repeated values from the current random thread which utilizes same seed
+                    double randomOrigin = currentRandomThread.nextDouble(0.0, 60);
+                    double randomNum = currentRandomThread.nextDouble(randomOrigin, 100);
                     
                     if(randomNum < abstractRelic.getDropChance()) {
                         ItemStack drop = abstractRelic.setRelicConditionAndGet(true, 0);
