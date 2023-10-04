@@ -1,4 +1,12 @@
 # :european_castle: 克托尼亞的遺物
+
+<div align="center">
+
+![bStats Servers](https://img.shields.io/bstats/servers/15420)
+![bStats Players](https://img.shields.io/bstats/players/15420)
+
+</div>
+
 發現並發掘克托尼亞的遺物, 這些遺物可以與豬布林進行交易, 根據遺物的稀有程度, 你也可以獲得超棒的獎勵! 也可以在底下進行設定, 請查看 :gear: 配置](#gear-配置)
 
 有些遺物也有自己的用途或功能! 這些功能你能在遊戲中發現.
