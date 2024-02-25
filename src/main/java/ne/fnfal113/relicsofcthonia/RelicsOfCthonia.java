@@ -1,7 +1,8 @@
 package ne.fnfal113.relicsofcthonia;
 
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.bakedlibs.dough.updater.BlobBuildUpdater;
 import io.github.bakedlibs.dough.updater.GitHubBuildsUpdaterTR;
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import ne.fnfal113.relicsofcthonia.config.ConfigManager;
 import ne.fnfal113.relicsofcthonia.items.RelicsItemSetup;
 import ne.fnfal113.relicsofcthonia.listeners.MiningListener;
@@ -49,7 +50,6 @@ public final class RelicsOfCthonia extends JavaPlugin implements SlimefunAddon {
         if (getConfig().getBoolean("auto-update", true) && getDescription().getVersion().startsWith("Build_STCT - ")) {
             new GitHubBuildsUpdaterTR(this, getFile(), "SlimeTraditionalTranslation/RelicsOfCthonia/main").start();
         }
-
     }
 
     public void registerEvents(){

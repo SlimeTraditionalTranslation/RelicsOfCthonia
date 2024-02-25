@@ -27,7 +27,7 @@
 | 非官方繁體中文版 | 官方英文版 |
 | -------- | -------- |
 | 點下方圖片下載 | 點下方圖片下載 |
-| [![Build Status](https://xmikux.github.io/builds/SlimeTraditionalTranslation/RelicsOfCthonia/main/badge.svg)](https://xmikux.github.io/builds/SlimeTraditionalTranslation/RelicsOfCthonia/main) | [![Build Status](https://thebusybiscuit.github.io/builds/FN-FAL113/RelicsOfCthonia/main/badge.svg)](https://thebusybiscuit.github.io/builds/FN-FAL113/RelicsOfCthonia/main) |
+| [![Build Status](https://xmikux.github.io/builds/SlimeTraditionalTranslation/RelicsOfCthonia/main/badge.svg)](https://xmikux.github.io/builds/SlimeTraditionalTranslation/RelicsOfCthonia/main) | [![Build Status](https://thebusybiscuit.github.io/builds/FN-FAL113/RelicsOfCthonia/main/badge.svg)](https://blob.build/project/RelicsOfCthonia) |
 
 ## 💫 類別
 <div align="center">
@@ -64,7 +64,15 @@
     <p>這個插件在掉落方面是可以高度配置的, 遺物在哪裡掉落 (方塊或怪物) 以及你每個遺物成功以物換物中獲得的豬布林獎勵數量. 你也可以添加額外的物品掉落獎勵或在字串中掉落遺物的位置自行刪除它們. 物品獎勵支持適當的物品ID, 例如原版物品與黏液科技. <br> 你也可以通過刪除 relic-settings.yml 檔案來隨機配置模板.</p>
 </div>
 
+## 💖 Support the Project/Dev
+I develop stuff for free with dedication and hard work. Sharing this project with fellow minecraft gamers/server owners or giving it a star is a huge sign of appreciation!</br>
+a donation button (currently using parent's paypal due to my pending account requirements).<br/>
+<a href="https://www.paypal.com/paypalme/ameliaOrbeta" target=_blank>
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="40%" />
+</a>
+
 ## :label: Credits
-Huge credits to the custom heads used in this addon which are all from https://minecraft-heads.com/custom-heads
+Minecraft-Heads for the head textures used by the addon:<br>
+[Visit MC Heads Site](https://minecraft-heads.com/)
 
 

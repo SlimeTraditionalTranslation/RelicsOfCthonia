@@ -6,7 +6,7 @@
 
     <groupId>ne.fnfal113</groupId>
     <artifactId>RelicsOfCthonia</artifactId>
-    <version>Unofficial-1.7</version>
+    <version>Unofficial-1.8.2</version>
     <packaging>jar</packaging>
 
     <name>RelicsOfCthonia</name>
@@ -16,23 +16,39 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>https://github.com/FN-FAL113</url>
+
+    <url>https://github.com/FN-FAL113/RelicsOfCthonia</url>
 
     <build>
+        <finalName>${project.name} v${project.version}</finalName>
+        <defaultGoal>clean package</defaultGoal>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*</include>
+                    <include>json/*</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -41,25 +57,31 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- shaded packages -->
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>ne.fnfal113.relicsofcthonia.bstats</shadedPattern>
+                        </relocation> 
+
+                        <relocation>
+                            <pattern>io.github.bakedlibs.dough.updater</pattern>
+                            <shadedPattern>ne.fnfal113.relicsofcthonia.dough.updater</shadedPattern>
                         </relocation>
+                        <!-- a transitive dependency, necessary for dough-updater -->
+                        <relocation>
+                            <pattern>io.github.bakedlibs.dough.versions</pattern>
+                            <shadedPattern>ne.fnfal113.relicsofcthonia.dough.versions</shadedPattern>
+                        </relocation>      
                     </relocations>
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
@@ -67,10 +89,12 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
@@ -90,6 +114,20 @@
             <artifactId>Slimefun4</artifactId>
             <version>RC-32</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.baked-libs.dough</groupId>
+            <artifactId>dough-updater</artifactId>
+            <version>fcdbd45aa0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.baked-libs.dough</groupId>
+            <artifactId>dough-common</artifactId>
+            <version>fcdbd45aa0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

@@ -79,15 +79,15 @@ public class RelicPlaceBreakListener implements Listener {
         Optional<SlimefunItem> relic = Optional.ofNullable(SlimefunItem.getByItem(itemInHand));
 
         relic.ifPresent(item -> {
-            if(item instanceof AbstractRelic){
-                Utils.sendRelicMessage("你已放置了遺物, 它一旦被破壞將不會再掉落任何東西!", event.getPlayer());
+            if(item instanceof AbstractRelic) {
+                Utils.sendRelicMessage("你已放置了遺物，它一旦被破壞將不會再掉落任何東西!", event.getPlayer());
             }
         });
 
     }
 
     @EventHandler
-    public void onRelicBreak(BlockBreakEvent event){
+    public void onRelicBreak(BlockBreakEvent event) {
         if(event.isCancelled()){
             return;
         }
@@ -97,7 +97,7 @@ public class RelicPlaceBreakListener implements Listener {
         Optional<SlimefunItem> relic = Optional.ofNullable(BlockStorage.check(blockBroken));
 
         relic.ifPresent(item -> {
-            if(item instanceof AbstractRelic){
+            if(item instanceof AbstractRelic) {
                 event.setCancelled(true);
 
                 BlockStorage.clearBlockInfo(blockBroken);
